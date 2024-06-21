@@ -5,7 +5,6 @@ import tensorflow as tf
 from pathlib import Path
 from src.cnnClassifier.entity.config_entity import PrepareBaseModelConfig
 
-
 class PrepareBaseModel:
     def __init__(self, config: PrepareBaseModelConfig):
         self.config = config
@@ -23,10 +22,10 @@ class PrepareBaseModel:
     def _prepare_full_model(model, classes, freeze_all, freeze_till, learning_rate):
         if freeze_all:
             for layer in model.layers:
-                model.trainable = False
+                layer.trainable = False
         elif (freeze_till is not None) and (freeze_till > 0):
             for layer in model.layers[:-freeze_till]:
-                model.trainable = False
+                layer.trainable = False
 
         flatten_in = tf.keras.layers.Flatten()(model.output)
         prediction = tf.keras.layers.Dense(
@@ -62,7 +61,3 @@ class PrepareBaseModel:
     @staticmethod
     def save_model(path: Path, model: tf.keras.Model):
         model.save(path)
-
-
-
-
